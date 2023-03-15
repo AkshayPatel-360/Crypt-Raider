@@ -65,8 +65,11 @@ void UGrabber::GrabObject()
 	//DrawDebugSphere(GetWorld(),HitResult.ImpactPoint,10,10,FColor::Blue,false,5);
 	if (HasHit)
 	{
+			UPrimitiveComponent* HitComponent = HitResult.GetComponent();
+			HitComponent->WakeRigidBody();
+			
 			PhysicsHandle->GrabComponentAtLocationWithRotation(
-			HitResult.GetComponent(),
+			HitComponent,
 			NAME_None,
 			HitResult.ImpactPoint,
 			GetComponentRotation());
@@ -76,6 +79,21 @@ void UGrabber::GrabObject()
 void UGrabber::Release()
 {
 	UE_LOG(LogTemp,Display,TEXT("Relese called "));
+
+	UPhysicsHandleComponent *PhysicsHandle = GetUPhysicsHandleComponent();
+
+	if (PhysicsHandle == nullptr)
+	{
+		return;
+	}
+
+	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+	{
+		PhysicsHandle->GetGrabbedComponent()->WakeRigidBody();
+		PhysicsHandle->ReleaseComponent();
+	}
+	
+	
 }
 
 
