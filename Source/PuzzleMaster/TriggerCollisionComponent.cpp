@@ -7,9 +7,7 @@
 UTriggerCollisionComponent::UTriggerCollisionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	
 }
-
 
 // Called when the game starts
 void UTriggerCollisionComponent::BeginPlay()
@@ -22,20 +20,14 @@ void UTriggerCollisionComponent::BeginPlay()
 void UTriggerCollisionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-
-	//UE_LOG(LogTemp,Display,TEXT("Unlocking "));
+	
 	AActor* Actor = GetAcceptableActor();
 	if (Actor != nullptr)
 	{
-		UE_LOG(LogTemp,Display,TEXT("Unlocking "));
-
 		Mover->SetShouldMove(true);
 	}
 	else
 	{
-		UE_LOG(LogTemp,Display,TEXT("Relockking "));
-
 		Mover->SetShouldMove(false);
 	}
 }
@@ -51,7 +43,10 @@ AActor* UTriggerCollisionComponent::GetAcceptableActor() const
 	GetOverlappingActors(Actors);
 	for (AActor* Actor : Actors)
 	{
-		if (Actor->ActorHasTag(AcceptableActorTagName))
+		const bool HasAcceptableTag = Actor->ActorHasTag(AcceptableActorTagName);
+		const bool HasGrabbed = Actor->ActorHasTag("Grabbed");
+		
+		if ( HasAcceptableTag && !HasGrabbed)
 		{
 			return Actor;
 		}
