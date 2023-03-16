@@ -16,6 +16,10 @@ UMover::UMover()
 	// ...
 }
 
+void UMover::SetShouldMove(bool ShouldMoveBool)
+{
+	ShouldMove = ShouldMoveBool;
+}
 
 // Called when the game starts
 void UMover::BeginPlay()
